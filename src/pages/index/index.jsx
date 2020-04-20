@@ -1,4 +1,4 @@
-import Taro from '@tarojs/taro'
+import Taro, { useEffect } from '@tarojs/taro'
 import { View } from '@tarojs/components'
 import { AtList, AtListItem } from "taro-ui"
 import MyTitle from '../../components/myTitle/MyTitle'
@@ -9,6 +9,21 @@ export default function Index() {
   const list = [
     '队伍1', '队伍2', '队伍3', '队伍4', '队伍5', '队伍6', '队伍7', '队伍8'
   ]
+
+  useEffect(() => {
+    const WeappEnv = Taro.getEnv() === Taro.ENV_TYPE.WEAPP
+    if (WeappEnv) {
+      Taro.cloud.init()
+    }
+  })
+
+  function handleClick(item, index) {
+    console.log(index);
+    Taro.navigateTo({
+      // url: `/pages/team/team?id=${item.id}`
+      url: '/pages/team/team?id=' + index
+    })
+  }
 
   return (
     <View className='index'>
@@ -23,13 +38,7 @@ export default function Index() {
       <View className="main">
         <MyTitle title="推荐队伍" />
         <AtList>
-          {list.map(item => <AtListItem title={item} arrow='right' onClick={this.handleClick} />)}
-          <AtListItem title='队伍1' arrow='right' onClick={this.handleClick} />
-          <AtListItem title='队伍2' arrow='right' />
-          <AtListItem title='队伍3' arrow='right' />
-          <AtListItem title='队伍4' arrow='right' />
-          <AtListItem title='队伍5' arrow='right' />
-          <AtListItem title='队伍6' arrow='right' />
+          {list.map((item, index) => <AtListItem title={item} arrow='right' onClick={() => handleClick(item, index)} />)}
         </AtList>
       </View>
     </View>

@@ -1,0 +1,1 @@
+export const SET_TEAM_INFO = 'SET_TEAM_INFO'

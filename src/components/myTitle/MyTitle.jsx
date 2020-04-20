@@ -1,5 +1,6 @@
 import Taro from "@tarojs/taro"
-import './style.scss'
+import { View } from '@tarojs/components'
+import './MyTitle.scss'
 
 export default function Title(props) {
   return(
