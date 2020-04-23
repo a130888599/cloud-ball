@@ -3,7 +3,7 @@
 	"projectname": "cloud-ball",
 	"description": "",
 	"cloudfunctionRoot": "functions/",
-	"appid": "touristappid",
+	"appid": "wx24f6ee81915b9753",
 	"setting": {
 		"urlCheck": true,
 		"es6": false,
@@ -13,5 +13,6 @@
 	"compileType": "miniprogram",
 	"simulatorType": "wechat",
 	"simulatorPluginLibVersion": {},
+	"cloudfunctionTemplateRoot": "cloudfunctionTemplate",
 	"condition": {}
 }

@@ -12,15 +12,14 @@
 
     .btn {
       width: 43%;
-      padding: 20px;
+      padding: 30px 20px;
       border-radius: 20px;
       text-align: center;
       color: white;
       font-weight: normal;
-      background-image: linear-gradient(135deg, #eb2f06, #e55039);
+      background-color: #0870FF;
 
       &:active {
-        
         transition: ease .5s;
       }
     }

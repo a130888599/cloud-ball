@@ -9,11 +9,22 @@ export default function LoginButton() {
   const [isLogin, setIsLogin] = useState(false) // 书否处于正在登陆状态
   const dispatch = useDispatch()
 
+  async function setUserInfoToStorage(data) {
+    Taro.setStorage({
+      key: 'userinfo',
+      data: data
+    })
+  }
+
   async function onGetUserInfo(e) {
     setIsLogin(true)
     const { avatarUrl, nickName } = e.detail.userInfo
-    dispatch({ type: LOGIN, payload: { avatarUrl, nickName } });
+    dispatch({ type: LOGIN, payload: { avatarUrl, nickName, isLogged: true } });
     setIsLogin(false)
+
+
+    // 将用户信息保存在本地
+    await setUserInfoToStorage({ avatarUrl, nickName })
   }
 
   return (

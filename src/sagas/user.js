@@ -11,8 +11,8 @@ import { userApi } from '../api'
 
 function* login(userInfo) {
   try {
-    
-  } catch (error) {
     const user = yield call(userApi.login, userInfo)
+  } catch (error) {
+    
   }
 }

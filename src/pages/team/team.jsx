@@ -1,6 +1,6 @@
 import Taro, { useState, useEffect } from "@tarojs/taro";
 import { useSelector } from "@tarojs/redux";
-import { View, Text } from "@tarojs/components";
+import { View, Text, Button } from "@tarojs/components";
 import { AtCard, AtAvatar } from "taro-ui";
 import Card from "../../components/card/Card";
 
@@ -16,8 +16,54 @@ export default function Team() {
     teamNum,
     members
   } = useSelector(state => state.team);
-  const [teamId, setTeamId] = useState(this.$router.params.id);
   
+  const [teamData, setTeamData] = useState({})
+  const teamId = this.$router.params.id
+
+  // 获取数据库中的组队详情
+  function getTeamData(teamId) {
+    Taro.request({
+      url: 'http://baidu.com',
+      data: JSON.stringify({ teamId }),
+      method: "GET",
+      success: ({data}) => {
+        console.log(data);
+        setTeamData(data)
+      }
+    })
+  }
+
+  // 是否已经加入了该队伍
+  async function isInTeam() {
+    let myTeamId = null;
+    await Taro.getStorage({
+      key: 'userinfo',
+      success: ({ data }) => {
+        myTeamId = data.myTeamId
+      }
+    })
+    
+    if (teamId === myTeamId)
+      return true
+    return false
+  }
+
+  //邀请好友
+  function inviteFriends() {
+    // TODO:分享小程序给好友
+    console.log('分享小程序给好友');
+  }
+
+  // 退出组队
+  function leaveTeam() {
+    // 发送请求
+    // 跳转回主页面
+    
+  }
+
+  useEffect(() => {
+    //getTeamData(teamId)
+  }, [teamId])
 
   return (
     <View className="team">
@@ -39,6 +85,10 @@ export default function Team() {
           />
         ))}
       </AtCard>
+      <View className="footer">
+          <Button className="invite-friends btn" onClick={() => inviteFriends()} >邀请好友</Button>
+          <Button className="leave-team btn" onClick={() => leaveTeam()} >退出组队</Button>
+      </View>
     </View>
   );
 }

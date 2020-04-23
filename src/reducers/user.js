@@ -19,8 +19,7 @@ export default function user(state = INITIAL_STATE, action) {
       return { ...state, openid }
     }
     case LOGIN: {
-      const { avatarUrl, nickName } = action.payload
-      const isLogged = !state.isLogged
+      const { avatarUrl, nickName, isLogged } = action.payload
       return { ...state, avatarUrl, nickName, isLogged }
     }
     default:
