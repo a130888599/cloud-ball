@@ -10,23 +10,36 @@ const db = cloud.database()
 // 云函数入口函数
 exports.main = async (event, context) => {
   const wxContext = cloud.getWXContext()
-  const { userInfo } = event
-
+  const { avatarUrl, nickName } = event
   try {
     const { data } = await db
       .collection('cloudball_user')
-      .where({ nickName: '张三' })
+      .where({ openid: event.userInfo.openId })
       .get()
     
+    // 数据库中是否存在这个用户
     if (data.length > 0) {
-      return { data }
+      return { data: data[0] }
     }
+    else {
+      await db.collection('cloudball_user')
+        .add({
+          data: {
+            avatarUrl: avatarUrl,
+            nickName: nickName,
+            myTeamId: null,
+            openid: wxContext.OPENID
+          }
+        })
+        .then(res => {
+          return { res }
+        })
+        .catch(error => {
+          return { error }
+        })
+    }
+
   } catch (error) {
     console.log('登陆云函数错误 :>> ', error);
-  }
-
-  return {
-    userInfo,
-    openid: wxContext.OPENID,
   }
 }
