@@ -12,13 +12,14 @@ export default function Team() {
     leaderInfo,
     address,
     startTime,
-    endTime,
-    teamNum,
-    members
+    memberNum,
+    members,
+    teamName,
+    isPublic
   } = useSelector(state => state.team);
   
   const [teamData, setTeamData] = useState({})
-  const teamId = this.$router.params.id
+  const teamId = this.$router.params._id
 
   // 获取数据库中的组队详情
   function getTeamData(teamId) {

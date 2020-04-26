@@ -7,11 +7,7 @@ import './Header.scss'
 export default function Header() {
   const nickName = useSelector(state => state.user.nickName);
   const avatarUrl = useSelector(state => state.user.avatarUrl);
-  const isLogged = useSelector(state => state.user.avatarUrl);;
-
-  useEffect(() => {
-    console.log('isLogged :', isLogged);
-  }, [nickName])
+  const isLogged = useSelector(state => state.user.isLogged);;
 
   return (
     <View className="Header">

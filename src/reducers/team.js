@@ -8,7 +8,8 @@ const imgUrl = {
 }
 
 const INITIAL_STATE = {
-  teamId: 'asdxczsaa',
+  _id: 'asdxczsaa',
+  teamName: '说什么都队',
   leaderInfo: { // 队长信息
     openid: '12312',
     nickName: '罗翔',
@@ -16,8 +17,8 @@ const INITIAL_STATE = {
   },
   address: '广工篮球场B区',
   startTime: '星期一',
-  endTime: '星期二',
-  teamNum: '5',
+  isPublic: true,
+  memberNum: '5',
   members: [
     {
       openid: 'sdasa',
@@ -35,23 +36,8 @@ const INITIAL_STATE = {
 export default function team(state = INITIAL_STATE, action) {
   switch (action.type) {
     case SET_TEAM_INFO: {
-      const {
-        teamId,
-        leaderInfo,
-        address,
-        startTime,
-        endTime,
-        teamNum
-      } = action.payload
-      return {
-        ...state,
-        teamId,
-        leaderInfo,
-        address,
-        startTime,
-        endTime,
-        teamNum
-      }
+      const payload = action.payload
+      return { ...state, ...payload }
     }
     default:
       return state

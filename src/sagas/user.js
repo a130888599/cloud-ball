@@ -11,8 +11,36 @@ import { userApi } from '../api'
 
 function* login(userInfo) {
   try {
-    const user = yield call(userApi.login, userInfo)
+    const { avatarUrl, nickName } = userInfo
+
+    //调用api，得到返回结果
+    const user = yield call(userApi.login, { avatarUrl, nickName })
+
+    // 将用户信息存储到本地
+    yield Taro.setStorage({ key: 'userinfo', data: user })
+
+    // 更新store的数据
+    const isLogged = !!user
+    yield put({ type: SET_LOGIN_INFO, payload: { ...user, isLogged } })
+
+    // 提示登陆成功
+    Taro.atMessage({ type: 'success', message: '登陆成功！' })
   } catch (error) {
-    
+    console.log('error :>> ', error);
+
+    // 登陆失败
+    //yield put({ type: LOGIN_ERROR })
+
+    // 提示登陆失败信息
+    Taro.atMessage({ type: 'error', message: '登陆失败！' })
   }
 }
+
+function* watchLogin() {
+  while (true) {
+    const { payload } = yield take(LOGIN) // 监听LOGIN，触发则更新
+    yield fork(login, payload)
+  }
+}
+
+export { watchLogin }

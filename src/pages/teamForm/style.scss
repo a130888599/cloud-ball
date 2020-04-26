@@ -1,0 +1,35 @@
+@import "~taro-ui/dist/style/components/form.scss";
+@import "~taro-ui/dist/style/components/button.scss";
+@import "~taro-ui/dist/style/components/input.scss";
+@import "~taro-ui/dist/style/components/slider.scss";
+@import "~taro-ui/dist/style/components/switch.scss";
+
+.TeamForm {
+  font-size: small;
+}
+
+.btn {
+  width: 80%;
+  margin-bottom: 20px;
+  background-color: #0870FF;
+  color: white;
+}
+
+.picker {
+  border: 1px solid #000;
+  padding: 20px;
+  margin: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.sliderBox {
+  padding: 20px;
+  margin: 15px;
+  border: 1px solid #000;
+  .slider {
+    margin: 0 auto;
+    width: 90%;
+  }
+}

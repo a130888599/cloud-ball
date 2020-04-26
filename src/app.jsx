@@ -25,14 +25,15 @@ class App extends Component {
 
   config = {
     pages: [
-      "pages/mine/mine",
       "pages/index/index",
+      "pages/teamForm/teamForm",
+      "pages/mine/mine",
       "pages/team/team"
     ],
     window: {
       backgroundTextStyle: "light",
       navigationBarBackgroundColor: "#fff",
-      navigationBarTitleText: "云打球",
+      navigationBarTitleText: "co-ball",
       navigationBarTextStyle: "black"
     },
     tabBar: {

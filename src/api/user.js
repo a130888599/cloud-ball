@@ -5,10 +5,10 @@ async function login(userInfo) {
   try {
     if (isWeapp) {
       const { result } = await Taro.cloud.callFunction({
-        name: 'login',
-        data: { userInfo }
+        name: 'cloudball_login',
+        data: userInfo
       })
-      return result.user
+      return result.data
     }
   } catch (error) {
     console.log('UserApi ERROR :', error);

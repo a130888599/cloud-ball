@@ -20,15 +20,20 @@ export default function Index() {
   function handleClick(item, index) {
     console.log(index);
     Taro.navigateTo({
-      // url: `/pages/team/team?id=${item.id}`
       url: '/pages/team/team?id=' + index
+    })
+  }
+
+  function newTeam() {
+    Taro.navigateTo({
+      url: `/pages/teamForm/teamForm`
     })
   }
 
   return (
     <View className='index'>
       <View className="Header">
-        <View className="newTeam btn">
+        <View className="newTeam btn" onClick={newTeam}>
           发布组队
         </View>
         <View className="newGame btn">
