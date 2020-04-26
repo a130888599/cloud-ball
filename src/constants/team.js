@@ -1,2 +1,5 @@
 export const SET_TEAM_INFO = 'SET_TEAM_INFO'
 export const ADD_TEAM = 'ADD_TEAM'
+export const GET_TEAM_LIST = 'GET_TEAM_LIST'
+export const SET_TEAM_LIST = 'SET_TEAM_LIST'
+export const GET_TEAM_INFO = 'GET_TEAM_INFO'

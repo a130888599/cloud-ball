@@ -1,4 +1,4 @@
-import { SET_TEAM_INFO } from '../constants'
+import { SET_TEAM_INFO, SET_TEAM_LIST } from '../constants'
 
 const imgUrl = {
   avatar1: 'https://pic1.zhimg.com/80/v2-286b615ef914eda26e78cd343449b063_720w.jpg',
@@ -13,7 +13,7 @@ const INITIAL_STATE = {
   leaderInfo: { // 队长信息
     openid: '12312',
     nickName: '罗翔',
-    avatar: imgUrl.avatar1
+    avatarUrl: imgUrl.avatar1
   },
   address: '广工篮球场B区',
   startTime: '星期一',
@@ -23,14 +23,15 @@ const INITIAL_STATE = {
     {
       openid: 'sdasa',
       nickName: '纯黑',
-      avatar: imgUrl.avatar2
+      avatarUrl: imgUrl.avatar2
     },
     {
       openid: '213124141',
       nickName: '松羊夫人',
-      avatar: imgUrl.avatar3
+      avatarUrl: imgUrl.avatar3
     }
-  ]
+  ],
+  teamList: []
 }
 
 export default function team(state = INITIAL_STATE, action) {
@@ -38,6 +39,10 @@ export default function team(state = INITIAL_STATE, action) {
     case SET_TEAM_INFO: {
       const payload = action.payload
       return { ...state, ...payload }
+    }
+    case SET_TEAM_LIST: {
+      const { teamList } = action.payload
+      return { ...state, teamList }
     }
     default:
       return state
