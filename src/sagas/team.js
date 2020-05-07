@@ -1,20 +1,19 @@
 import Taro from '@tarojs/taro'
 import { call, put, take, fork } from 'redux-saga/effects'
 
-import { ADD_TEAM, SET_TEAM_INFO, GET_TEAM_LIST, SET_TEAM_LIST, GET_TEAM_INFO } from '../constants'
+import { ADD_TEAM, SET_TEAM_INFO, GET_TEAM_LIST, SET_TEAM_LIST, GET_TEAM_INFO, SET_MYTEAMID, JOIN_TEAM, QUIT_TEAM } from '../constants'
 import { teamApi } from '../api'
 
 function* addTeam(teamData) {
   try {
-    const { teamName, address, memberNum, startTime, isPublic, leaderInfo } = teamData
+    const { teamName, address, memberNum, startTime, isPublic, members } = teamData
     let team = {
       teamName,
       address,
       memberNum,
       startTime,
       isPublic,
-      leaderInfo,
-      members: [leaderInfo]
+      members
     }
 
     //调用API，返回数据库增加成功的数据
@@ -27,9 +26,10 @@ function* addTeam(teamData) {
 
     //更新store的数据
     yield put({ type: SET_TEAM_INFO, payload: team })
+    // 更新本地的teamId
+    yield put({ type: SET_MYTEAMID, payload: { _id } })
 
     //跳转到组队详情页面
-    
     Taro.navigateTo({ 
       url: `/pages/team/team?_id=${_id}`
      })
@@ -53,10 +53,44 @@ function* getTeamList() {
 function* getTeamInfo(payload) {
   const { _id } = payload
   try {
-    const result = yield call(teamApi.getTeamInfo, _id)
-    const { data } = result
+    // 根据id返回队伍详情
+    const { data } = yield call(teamApi.getTeamInfo, _id)
     // 存入store
     yield put({ type: SET_TEAM_INFO, payload: { ...data } })
+  } catch (error) {
+    console.log('GetTeamInfoError :>> ', error);
+  }
+}
+
+function* joinTeam(payload) {
+  const { newMemberInfo, teamId } = payload
+  try {
+    // 修改数据库
+    const res = yield call(teamApi.joinTeam, { newMemberInfo, teamId })
+    console.log('res :>> ', res);
+    // yield call(teamApi.quitTeam, newMemberInfo._id)
+    const { data } = yield call(teamApi.getTeamInfo, teamId)
+    
+    //更新store
+    yield put({ type: SET_TEAM_INFO, payload: { ...data } })
+    //更新用户的teamId
+    yield put({ type: SET_MYTEAMID, payload: { _id: teamId } })
+  } catch (error) {
+    console.log('error :>> ', error);
+  }
+}
+
+function* quitTeam(payload) {
+  const { userId, teamId } = payload
+  try {
+    //发送退出组队请求
+    yield call(teamApi.quitTeam, { userId, teamId })
+    //获取最新的组队数据
+    const { data } = yield call(teamApi.getTeamInfo, teamId)
+    //更新组队的store
+    yield put({ type: SET_TEAM_INFO, payload: { ...data } })
+    //将个人组队修改为空
+    yield put({ type: SET_MYTEAMID, payload: { _id: '' } })
   } catch (error) {
     console.log('error :>> ', error);
   }
@@ -80,5 +114,23 @@ function* watchGetTeamInfo() {
     yield fork(getTeamInfo, payload)
   }
 }
+function* watchJoinTeam() {
+  while (true) {
+    const { payload } = yield take(JOIN_TEAM)
+    yield fork(joinTeam, payload)
+  }
+}
+function* watchQuitTeam() {
+  while (true) {
+    const { payload } = yield take(QUIT_TEAM)
+    yield fork(quitTeam, payload)
+  }
+}
 
-export { watchAddTeam, watchGetTeamList, watchGetTeamInfo }
+export {
+  watchAddTeam,
+  watchGetTeamList,
+  watchGetTeamInfo,
+  watchJoinTeam,
+  watchQuitTeam
+}

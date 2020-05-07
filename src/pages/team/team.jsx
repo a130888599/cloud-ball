@@ -1,23 +1,23 @@
 import Taro, { useState, useEffect } from "@tarojs/taro";
 import { useSelector, useDispatch } from "@tarojs/redux";
-import { View, Button } from "@tarojs/components";
+import { View } from "@tarojs/components";
 import { AtCard } from "taro-ui";
-import Card from "../../components/card/Card";
 
 import "./style.scss";
 import { GET_TEAM_INFO } from "../../constants";
+import MemberList from "../../components/memberList/MemberList";
+import FooterBtn from "../../components/footerBtn/FooterBtn";
 
 export default function Team() {
   const {
-    leaderInfo,
     address,
     startTime,
     memberNum,
-    members,
     teamName,
     isPublic
   } = useSelector(state => state.team);
-
+  const { myTeamId } = useSelector(state => state.user)
+  const [isInTeam, setIsInTeam] = useState(false)
   const _id = this.$router.params._id
   const dispatch = useDispatch()
 
@@ -25,35 +25,15 @@ export default function Team() {
     console.log('_id :>> ', _id);
     // 根据id获取队伍详情
     dispatch({ type: GET_TEAM_INFO, payload: { _id } });
+    // 是否是队长
   }, [])
 
-  // 是否已经加入了该队伍
-  async function isInTeam() {
-    let myTeamId = null;
-    await Taro.getStorage({
-      key: 'userinfo',
-      success: ({ data }) => {
-        myTeamId = data.myTeamId
-      }
-    })
-    
-    if (_id === myTeamId)
-      return true
-    return false
-  }
+  useEffect(() => {
+    console.log('更新了teamId');
+    if (_id === myTeamId) setIsInTeam(true)
+    else setIsInTeam(false)
+  }, [myTeamId])
 
-  //邀请好友
-  function inviteFriends() {
-    // TODO:分享小程序给好友
-    console.log('分享小程序给好友');
-  }
-
-  // 退出组队
-  function leaveTeam() {
-    // 发送请求
-    // 跳转回主页面
-    
-  }
 
   return (
     <View className="team">
@@ -66,25 +46,11 @@ export default function Team() {
       <AtCard className="item" title="时间">
         {startTime}
       </AtCard>
-      <AtCard className="item" title="队长">
-        <Card nickName={leaderInfo.nickName} avatar={leaderInfo.avatarUrl} />
-      </AtCard>
-      <AtCard className="item" title="队员">
-        {members.map((member, index) => (
-          <Card
-            key={index.toString()}
-            nickName={member.nickName}
-            avatar={member.avatarUrl}
-          />
-        ))}
+      <AtCard className="item" title="成员" extra={`上限${memberNum}人`}>
+        <MemberList/>
       </AtCard>
       <View className="footer">
-        <Button className="invite-friends btn" onClick={() => inviteFriends()}>
-          邀请好友
-        </Button>
-        <Button className="leave-team btn" onClick={() => leaveTeam()}>
-          退出组队
-        </Button>
+        <FooterBtn isInTeam={isInTeam} teamId={_id} />
       </View>
     </View>
   );

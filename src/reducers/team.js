@@ -10,11 +10,6 @@ const imgUrl = {
 const INITIAL_STATE = {
   _id: 'asdxczsaa',
   teamName: '说什么都队',
-  leaderInfo: { // 队长信息
-    openid: '12312',
-    nickName: '罗翔',
-    avatarUrl: imgUrl.avatar1
-  },
   address: '广工篮球场B区',
   startTime: '星期一',
   isPublic: true,
@@ -23,12 +18,14 @@ const INITIAL_STATE = {
     {
       openid: 'sdasa',
       nickName: '纯黑',
-      avatarUrl: imgUrl.avatar2
+      avatarUrl: imgUrl.avatar2,
+      isLeader: true
     },
     {
       openid: '213124141',
       nickName: '松羊夫人',
-      avatarUrl: imgUrl.avatar3
+      avatarUrl: imgUrl.avatar3,
+      isLeader: false
     }
   ],
   teamList: []

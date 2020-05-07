@@ -11,25 +11,37 @@ import { LOGIN, SET_LOGIN_INFO } from "../../constants/user.js";
 export default function Mine() {
 
   const isLogged = useSelector(state => state.user.isLogged)
+  const myTeamId = useSelector(state => state.user.myTeamId)
+  const user = useSelector(state => state.user)
   const dispatch = useDispatch()
 
   useEffect(() => {
     getStorage()
   }, [])
 
+  useEffect(() => {
+    Taro.setStorage({
+      key: 'userinfo', 
+      data: user
+    })
+  }, [myTeamId])
+
   // 获取本地用户数据
   async function getStorage() {
     Taro.getStorage({
       key: 'userinfo',
       success: function ({ data }) {
-        const { avatarUrl, nickName, openid, myTeamId  } = data
-        dispatch({ type: SET_LOGIN_INFO, payload: { avatarUrl, nickName, openid, myTeamId, isLogged: true } })
+        const { avatarUrl, nickName, openid, myTeamId, _id, isLogged  } = data
+        dispatch({ type: SET_LOGIN_INFO, payload: { avatarUrl, nickName, openid, myTeamId, _id, isLogged } })
       }
     })
   }
 
   function handleClick() {
-    console.log('点击了');
+    // 跳转对应页面
+    Taro.navigateTo({
+      url: '/pages/team/team?_id=' + myTeamId
+    })
   }
 
   return (
@@ -43,7 +55,6 @@ export default function Mine() {
             arrow="right"
             onClick={() => handleClick()}
           />
-          <AtListItem title="我的球队" arrow="right" />
           <AtListItem title="使用帮助" arrow="right" />
         </AtList>
       </View>

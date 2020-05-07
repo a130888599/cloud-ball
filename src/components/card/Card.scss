@@ -1,14 +1,21 @@
 .card {
   display: flex;
   align-items: center;
+  justify-content: space-between;
 
-  .avatar {
-    border-radius: 100%;
-    width: 100px;
-    height: 100px;
+  .left {
+    display: flex;
+    align-items: center;
+    .avatar {
+      border-radius: 100%;
+      width: 100px;
+      height: 100px;
+    }
+    .nickName {
+      margin-left: 25px;
+    }
   }
-
-  .nickName {
-    margin-left: 25px;
+  .right {
+    color: red;
   }
 }

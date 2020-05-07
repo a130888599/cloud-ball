@@ -11,7 +11,7 @@ exports.main = async (event, context) => {
     const result = db.collection('cloudball_team').doc(_id).get()
     return result
   } catch (error) {
-    console.log('error :>> ', error);
+    console.log('云函数GetTeamInfoError :>> ', error);
   }
   return {
     _id,

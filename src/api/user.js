@@ -8,6 +8,7 @@ async function login(userInfo) {
         name: 'cloudball_login',
         data: userInfo
       })
+      console.log(result);
       return result.data
     }
   } catch (error) {

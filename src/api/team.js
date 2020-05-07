@@ -43,6 +43,34 @@ async function getTeamInfo(_id) {
   }
 }
 
-const teamApi = { addTeam, getTeamList, getTeamInfo }
+async function joinTeam(data) {
+  try {
+    if (isWeapp) {
+      const { result } = await Taro.cloud.callFunction({
+        name: 'cloudball_joinTeam',
+        data: { ...data }
+      })
+      console.log('resValue :>> ', result);
+      return result
+    }
+  } catch (error) {
+    console.log('API-JoinTeam-Error :>> ', error);
+  }
+}
+
+async function quitTeam({ userId, teamId }) {
+  try {
+    const { result } = await Taro.cloud.callFunction({
+      name: 'cloudball_quitTeam',
+      data: { userId, teamId }
+    })
+    console.log('result :>> ', result);
+    return result
+  } catch (error) {
+    console.log('error :>> ', error);
+  }
+}
+
+const teamApi = { addTeam, getTeamList, getTeamInfo, joinTeam, quitTeam }
 
 export default teamApi

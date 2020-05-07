@@ -10,7 +10,7 @@ const db = cloud.database()
 // 云函数入口函数
 exports.main = async (event, context) => {
   const wxContext = cloud.getWXContext()
-  const { teamName, address, startTime, isPublic, members, memberNum, leaderInfo } = event
+  const { teamName, address, startTime, isPublic, members, memberNum } = event
   try {
     const dbRes = await db.collection('cloudball_team').add({
       data: {
@@ -19,13 +19,15 @@ exports.main = async (event, context) => {
         startTime, 
         isPublic, 
         members, 
-        memberNum,
-        leaderInfo
+        memberNum
       }
+    })
+    await db.collection('cloudball_user').doc(members[0]._id).update({
+      data: { myTeamId: dbRes._id }
     })
     return { _id: dbRes._id }
   } catch (error) {
-    console.log('error :>> ', error);
+    console.log('addTeam error :>> ', error);
   }
   return {
     data: { event }

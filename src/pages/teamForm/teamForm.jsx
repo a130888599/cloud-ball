@@ -1,6 +1,6 @@
-import Taro, { useState } from '@tarojs/taro';
+import Taro, { useState, useEffect } from '@tarojs/taro';
 import { View, Picker } from '@tarojs/components';
-import { AtButton, AtForm, AtInput, AtSlider, AtSwitch } from "taro-ui";
+import { AtButton, AtForm, AtInput, AtSlider, AtSwitch, AtModal } from "taro-ui";
 import { useDispatch, useSelector } from '@tarojs/redux'
 
 import './style.scss'
@@ -14,14 +14,19 @@ export default function TeamForm() {
   const [startDate, setStartDate] = useState()
   const [startTime, setStartTime] = useState()
   const [isPublic, setIsPublic] = useState(true)
-  const { avatarUrl, nickName, openid } = useSelector(state => state.user)
-
+  const { avatarUrl, nickName, _id } = useSelector(state => state.user)
+  const [isOpened, setIsOpened] = useState(nickName === '' ? true : false)
   const dispatch = useDispatch()
+
+  useEffect(() => {
+    if (_id === null || _id === '')
+      console.log('请先登录');
+  }, [])
 
   function onSubmit() {
     console.log("进行提交！");
     let time = `${startDate} ${startTime}`
-    const leaderInfo = { avatarUrl, nickName, openid }
+    let members = [{avatarUrl, nickName, _id, isLeader: true}]
     dispatch({
       type: ADD_TEAM,
       payload: {
@@ -30,12 +35,11 @@ export default function TeamForm() {
         memberNum,
         isPublic,
         startTime: time,
-        leaderInfo
+        members
       }
-    })
-
+    });
+    
   }
-
   function onReset() {
     setTeamName()
     setAddress()
@@ -45,8 +49,38 @@ export default function TeamForm() {
     setIsPublic(true)
   }
 
+  function handleClose() {
+    console.log('执行事件');
+    Taro.switchTab({
+      url: "/pages/index/index"
+    });
+  }
+  function handleCancel() { 
+    setIsOpened(!isOpened)
+    Taro.switchTab({
+      url: '/pages/index/index'
+    })
+  }
+  function handleConfirm() {
+    console.log('执行');
+    Taro.switchTab({
+      url: "/pages/mine/mine"
+    });
+  }
+
   return (
     <View className="TeamForm">
+      <AtModal
+        className="modal"
+        isOpened={isOpened}
+        title="注意"
+        cancelText="取消"
+        confirmText="登陆"
+        onClose={handleClose}
+        onCancel={handleCancel}
+        onConfirm={handleConfirm}
+        content="请先登陆再发布组队"
+      />
       <AtForm onSubmit={onSubmit} onReset={onReset}>
         <View className="form-item">
           <AtInput
