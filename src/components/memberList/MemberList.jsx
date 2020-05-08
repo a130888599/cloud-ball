@@ -6,7 +6,7 @@ import Card from '../card/Card'
 //import './style.scss'
 
 export default function MemberList() {
-  const { members, memberNum } = useSelector(state => state.team)
+  const { members } = useSelector(state => state.team)
   return (
     <View>
       {members.map((member, index) => (

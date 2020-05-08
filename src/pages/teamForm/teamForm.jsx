@@ -14,8 +14,8 @@ export default function TeamForm() {
   const [startDate, setStartDate] = useState()
   const [startTime, setStartTime] = useState()
   const [isPublic, setIsPublic] = useState(true)
-  const { avatarUrl, nickName, _id } = useSelector(state => state.user)
   const [isOpened, setIsOpened] = useState(nickName === '' ? true : false)
+  const { avatarUrl, nickName, _id, myTeamId } = useSelector(state => state.user)
   const dispatch = useDispatch()
 
   useEffect(() => {
@@ -26,16 +26,14 @@ export default function TeamForm() {
   function onSubmit() {
     console.log("进行提交！");
     let time = `${startDate} ${startTime}`
-    let members = [{avatarUrl, nickName, _id, isLeader: true}]
+    let members = [{ avatarUrl, nickName, _id, isLeader: true }]
+    let teamData = { teamName, address, memberNum, members, isPublic, startTime: time }
+    let userData = { userId: _id, oldTeamId: myTeamId }
     dispatch({
       type: ADD_TEAM,
       payload: {
-        teamName,
-        address,
-        memberNum,
-        isPublic,
-        startTime: time,
-        members
+        teamData,
+        userData
       }
     });
     

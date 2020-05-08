@@ -28,12 +28,13 @@ class App extends Component {
       "pages/index/index",
       "pages/teamForm/teamForm",
       "pages/mine/mine",
-      "pages/team/team"
+      "pages/team/team",
+      "pages/error/error"
     ],
     window: {
       backgroundTextStyle: "light",
       navigationBarBackgroundColor: "#fff",
-      navigationBarTitleText: "co-ball",
+      navigationBarTitleText: "CO-BALL",
       navigationBarTextStyle: "black"
     },
     tabBar: {

@@ -41,6 +41,12 @@ export default function Index() {
     //首次加载，需要获取数据库组队列表
     dispatch({ type: GET_TEAM_LIST, payload: {} });
   }
+  function joinTeam() {
+    Taro.showToast({
+      title: '暂未实现',
+      icon: 'none'
+    })
+  }
 
   return (
     <View className="index">
@@ -48,7 +54,7 @@ export default function Index() {
         <View className="newTeam btn" onClick={newTeam}>
           发布组队
         </View>
-        <View className="newGame btn" onClick={getTeamList}>
+        <View className="newGame btn" onClick={() => joinTeam()}>
           加入组队
         </View>
       </View>
@@ -67,6 +73,3 @@ export default function Index() {
     </View>
   );
 }
-Index.config = {
-  navigationBarTitleText: "广场"
-};

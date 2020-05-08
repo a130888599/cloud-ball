@@ -8,14 +8,20 @@ exports.main = async (event, context) => {
   const { userId, teamId } = event
   try {
     const _ = db.command
+    // 获取当前的成员数组
     const { data } = await db.collection('cloudball_team').doc(teamId).get()
-    let members = data.members.splice(data.members.findIndex((item) => item._id === userId), 1)
+    let members = data.members.filter(item => item._id !== userId)
+    // 如果去除用户后，成员数组为空，则直接删除该组队
+    if (members.length === 0) {
+      await db.collection('cloudball_team').doc(teamId).remove()
+      return { msg: '组队为空', successNum: 1 }
+    }
+
+    // 如果去除后成员数组不为空，则直接删除该成员即可
     await db.collection('cloudball_team').doc(teamId).update({
-      data: {
-        members: _.set(members)
-      }
+      data: { members: _.set(members) }
     })
-    return true
+    return { msg: '删除成员成功', successNum: 2 }
   } catch (error) {
     console.log('error :>> ', error); 
     return false

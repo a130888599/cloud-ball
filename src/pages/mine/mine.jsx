@@ -38,6 +38,13 @@ export default function Mine() {
   }
 
   function handleClick() {
+    if (myTeamId === "") {
+      Taro.showToast({
+        title: '请先加入组队',
+        icon: 'none'
+      })
+      return;
+    }
     // 跳转对应页面
     Taro.navigateTo({
       url: '/pages/team/team?_id=' + myTeamId

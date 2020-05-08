@@ -6,7 +6,7 @@ import { call, put, take, fork } from 'redux-saga/effects'
 // take: 在saga函数中监听action，并获取对应action所携带的数据
 // fork: 在saga函数中无阻塞的调用handleSaga，调用之后，不会阻塞后续的执行逻辑
 
-import { LOGIN, SET_LOGIN_INFO } from '../constants'
+import { LOGIN, SET_LOGIN_INFO, SET_MYTEAMID, SET_TEAM_ID } from '../constants'
 import { userApi } from '../api'
 
 function* login(userInfo) {
@@ -36,11 +36,35 @@ function* login(userInfo) {
   }
 }
 
+function* setTeamId(payload) {
+  try {
+    const { _id } = payload
+    //修改store
+    yield put({ type: SET_MYTEAMID, payload: { _id } })
+    //修改本地信息
+    let { data } = yield Taro.getStorage({ key: 'userinfo' })
+    data.myTeamId = _id
+    yield Taro.setStorage({ key: 'userinfo', data })
+  } catch (error) {
+    console.log('error :>> ', error);
+  }
+}
+
+
 function* watchLogin() {
   while (true) {
     const { payload } = yield take(LOGIN) // 监听LOGIN，触发则更新
     yield fork(login, payload)
   }
 }
+function* watchSetTeamId() {
+  while (true) {
+    const { payload } = yield take(SET_TEAM_ID)
+    yield fork(setTeamId, payload)
+  }
+}
 
-export { watchLogin }
+export {
+  watchLogin,
+  watchSetTeamId
+}

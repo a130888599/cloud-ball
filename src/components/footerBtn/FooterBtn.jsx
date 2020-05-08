@@ -6,8 +6,9 @@ import './style.scss'
 
 export default function FooterBtn(props) {
   const { isInTeam, teamId } = props;
-  const { _id, avatarUrl, nickName } = useSelector(state => state.user)
-  const newMemberInfo = { _id, avatarUrl, nickName }
+  const { _id, avatarUrl, nickName, myTeamId } = useSelector(state => state.user)
+  const { members, memberNum } = useSelector(state => state.team)
+  const newMemberInfo = { _id, avatarUrl, nickName, isLeader: false }
   const dispatch = useDispatch()
     //邀请好友
   function inviteFriends() {
@@ -16,16 +17,25 @@ export default function FooterBtn(props) {
   }
   // 退出组队
   function leaveTeam() {
-    // 发送请求
     dispatch({ type: QUIT_TEAM, payload: { teamId, userId: _id } })
-    // 跳转回主页面
-    // Taro.switchTab({ url: '/pages/index/index' })
   }
   // 加入队伍
   function joinTeam() {
-    console.log('欢迎加入!');
+    // 未登录，跳转登录界面
+    if (_id === "") {
+      Taro.switchTab({ url: "/pages/mine/mine" });
+      return;
+    }
+    // 队伍是否满员
+    if (memberNum === members.length) {
+      Taro.showToast({
+        title: '已满员',
+        icon: 'none'
+      })
+      return;
+    }
     // TODO:提示用户是否退出自己当前组队
-    dispatch({ type: JOIN_TEAM, payload: { newMemberInfo, teamId } });
+    dispatch({ type: JOIN_TEAM, payload: { newMemberInfo, teamId, oldTeamId: myTeamId } });
   }
 
   return (
